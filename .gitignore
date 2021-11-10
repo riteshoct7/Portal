@@ -353,3 +353,13 @@ Web/obj/Web.csproj.nuget.g.props
 Web/obj/Web.csproj.nuget.g.targets
 Web/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
 Web/obj/Debug/net6.0/apphost.exe
+Database/bin/Debug/Database.pdb
+Database/obj/Debug/Database.dll
+Web/obj/Debug/net6.0/scopedcss/Areas/Customer/Views/Shared/_CustomerLayout.cshtml.rz.scp.css
+Database/bin/Debug/Database.dll
+Database/obj/Debug/Database.pdb
+Common/obj/Debug/net6.0/Common.csproj.AssemblyReference.cache
+Database/obj/Debug/Model.xml
+Database/obj/Debug/Database.sqlproj.FileListAbsolute.txt
+Database/bin/Debug/Database.dacpac
+.vs/Portal/v17/.suo
