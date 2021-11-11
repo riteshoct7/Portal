@@ -15,6 +15,9 @@
         public const string AdminRoleTitle = "Admin";
         public const string CustomerRoleTitle = "Customer";
 
+
+        public const string usp_SelectCountry = "usp_SelectCountry";
+
         #endregion
     }
 }

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Common;
+using Dapper;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
@@ -28,13 +30,25 @@ namespace Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             {
-                IEnumerable<Country> lstcountry = unitOfWork.countryRepository.GetAll();
-
+                
                 List<CountryListingDTO> lst = new List<CountryListingDTO>();
-                foreach (var item in lstcountry)
+
+                //Stored Procedure Call
+                var parameter = new DynamicParameters();
+                parameter.Add("@CountryID",0);
+                parameter.Add("@Enabled", true);
+                var allObj = unitOfWork.storedProcedureRepository.List<Country>(Constants.usp_SelectCountry, parameter);
+                foreach (var item in allObj)
                 {
                     lst.Add(mapper.Map<CountryListingDTO>(item));
                 }
+
+                //Linq Call
+                //IEnumerable<Country> lstcountry = unitOfWork.countryRepository.GetAll();                 
+                //foreach (var item in lstcountry)
+                //{
+                //    lst.Add(mapper.Map<CountryListingDTO>(item));
+                //}
                 return View(lst);
             }
         }
