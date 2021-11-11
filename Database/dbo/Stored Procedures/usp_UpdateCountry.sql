@@ -3,7 +3,7 @@
 -- Create date: <11th Nov 2021>
 -- Description:	<Update Country>
 -- =============================================
-CREATE PROCEDURE usp_UpdateCountry
+CREATE PROCEDURE [dbo].[usp_UpdateCountry]
  @CountryId int
 ,@CountryName nvarchar(max)
 ,@ISDCode nvarchar(max)
@@ -14,7 +14,7 @@ AS
 
 BEGIN
 UPDATE [dbo].[Countries]
-   SET [CountryName] = CountryName 
+   SET [CountryName] = @CountryName 
       ,[ISDCode] = @ISDCode
       ,[Description] = @Description
       ,[Enabled] = @Enabled
