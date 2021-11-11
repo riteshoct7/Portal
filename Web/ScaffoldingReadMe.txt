@@ -10,3 +10,11 @@ Add the following code to the Configure method in your Application's Startup cla
             pattern : "{area:exists}/{controller=Home}/{action=Index}/{id?}"
           );
         });
+
+Third Part Tools Used
+
+1 juuery ui
+2 Datatables
+3 sweet alert
+4 fontawesome
+5 toastr

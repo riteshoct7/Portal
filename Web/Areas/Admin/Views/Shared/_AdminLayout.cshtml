@@ -7,6 +7,22 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+
+    @*For JqueryUI*@
+    <link rel="stylesheet" href="~/css/jqueryui/jquery-ui.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/jqueryui/jquery-ui.theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/jqueryui/jquery-ui.structure.css" asp-append-version="true" />
+    @*For JqueryUI*@
+
+    @*For Datatables*@
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" />
+    @*For Datatables*@
+
+
+    @*For Toastr*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    @*For Toastr*@
+
 </head>
 <body>
     <header>
@@ -38,12 +54,35 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - Web 
+            &copy; 2021 - Web
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    @*For JqueryUI*@
+    <script src="~/js/jqueryui/external/jquery/jquery.js" asp-append-version="true"></script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+    @*For JqueryUI*@
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @*For JqueryUI*@
+    <script src="~/js/jqueryui/jquery-ui.js" asp-append-version="true"></script>
+    @*For JqueryUI*@
+
+    @*For Datatables*@
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    @*For Datatables*@
+
+
+    @*For Toastr*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    @*For Toastr*@
+
+    @*For Sweet Alert*@
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    @*For Sweet Alert*@
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

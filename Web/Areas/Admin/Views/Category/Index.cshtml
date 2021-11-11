@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tblCategory">
     <thead>
         <tr>
 
@@ -47,3 +47,11 @@
         }
     </tbody>
 </table>
+@section scripts {
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#tblCategory").DataTable();
+    });
+</script>
+}
