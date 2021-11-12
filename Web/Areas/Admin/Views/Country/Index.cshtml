@@ -46,8 +46,14 @@
                     @Html.DisplayFor(modelItem => item.Enabled)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new {  id=item.CountryId })
-                    @Html.ActionLink("Delete", "Delete", new {  id=item.CountryId  })
+                    @*@Html.ActionLink("Edit", "Edit", new {  id=item.CountryId })*@
+                    <a href="/Admin/Category/Upsert/id" class="btn  btn-success text-white" style="cursor:pointer;">
+                         <i class="fas fa-edit"></i> &nbsp; Edit
+                    </a>
+                    <a  class="btn btn-danger text-white" style="cursor:pointer;">
+                         <i class="fas fa-trash-alt"></i> &nbsp; Delete
+                    </a>
+                    @*@Html.ActionLink("Delete", "Delete", new {  id=item.CountryId  })*@
                 </td>
             </tr>
         }

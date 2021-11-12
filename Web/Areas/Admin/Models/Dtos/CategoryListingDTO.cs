@@ -21,6 +21,7 @@ namespace Web.Areas.Admin.Models.Dtos
         [Display(Name = "Category Name")]
         public string CategoryName { get; set; }
 
+        [Required(ErrorMessage = "Category Description Required")]
         [Display(Name = "Description")]
         public string Description { get; set; }
 
