@@ -19,7 +19,7 @@
     @*For Datatables*@
 
     @*For Toastr*@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />*@
     @*For Toastr*@
 
 </head>
@@ -74,13 +74,14 @@
     @*For Datatables*@
 
     @*For Toastr*@
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+@*    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>*@
     @*For Toastr*@
 
     @*For Sweet Alert*@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @*For Sweet Alert*@
 
+    @await Component.InvokeAsync("Notyf") 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -363,3 +363,14 @@ Database/obj/Debug/Model.xml
 Database/obj/Debug/Database.sqlproj.FileListAbsolute.txt
 Database/bin/Debug/Database.dacpac
 .vs/Portal/v17/.suo
+Web/bin/Debug/net6.0/AspNetCoreHero.ToastNotification.dll
+Entities/obj/Debug/net6.0/Entities.csproj.AssemblyReference.cache
+Web/obj/Debug/net6.0/Web.MvcApplicationPartsAssemblyInfo.cs
+Web/bin/Debug/net6.0/AspNetCoreHero.ToastNotification.Views.dll
+Database/obj/Debug/Database.sqlproj.AssemblyReference.cache
+.vs/Portal/DesignTimeBuild/.dtbcache.v2
+.vs/Portal/v17/.futdcache.v1
+Database/Database.jfm
+.vs/Portal/project-colors.json
+.vs/Portal/v17/HierarchyCache.v1.txt
+Database/Database.dbmdl
