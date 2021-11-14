@@ -26,7 +26,10 @@ namespace Repository.Context
         #region Fields
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         public DbSet<ApplicationUser> User { get; set; }
         public DbSet<ApplicationRole> Role { get; set; }

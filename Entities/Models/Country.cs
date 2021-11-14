@@ -28,7 +28,10 @@ namespace Entities.Models
         public string Description { get; set; }
 
         [Display(Name = "Enabled")]
-        public bool Enabled { get; set; } 
+        public bool Enabled { get; set; }
+
+        public List<State> States { get; set; }
+
         #endregion
 
     }

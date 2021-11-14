@@ -77,5 +77,8 @@
     <Build Include="dbo\Stored Procedures\usp_SelectCountry.sql" />
     <Build Include="dbo\Stored Procedures\usp_InsertCountry.sql" />
     <Build Include="dbo\Stored Procedures\usp_DeleteCountry.sql" />
+    <Build Include="dbo\Tables\States.sql" />
+    <Build Include="dbo\Tables\Products.sql" />
+    <Build Include="dbo\Tables\Cities.sql" />
   </ItemGroup>
 </Project>

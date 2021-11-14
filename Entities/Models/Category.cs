@@ -26,6 +26,8 @@ namespace Entities.Models
 
         public bool Enabled { get; set; }
 
+        public List<Product> Products { get; set; }
+
 
         #endregion
     }
