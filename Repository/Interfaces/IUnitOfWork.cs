@@ -9,6 +9,7 @@
         IStoredProcedureRepository storedProcedureRepository { get; }
 
         IAuthenticationRepository authenticationRepository { get; }
+        IAuthorizationRepository authorizationRepository { get; }
         void SaveChanges();
 
         #endregion

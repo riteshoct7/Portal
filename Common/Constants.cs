@@ -21,7 +21,7 @@
         public const string usp_UpdateCountry = "usp_UpdateCountry"; 
         public const string usp_DeleteCountry = "usp_DeleteCountry";
 
-
+        
         #endregion
     }
 }

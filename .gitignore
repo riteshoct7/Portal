@@ -374,3 +374,5 @@ Database/Database.jfm
 .vs/Portal/project-colors.json
 .vs/Portal/v17/HierarchyCache.v1.txt
 Database/Database.dbmdl
+Repository/bin/Debug/net6.0/Common.dll
+Repository/bin/Debug/net6.0/Common.pdb

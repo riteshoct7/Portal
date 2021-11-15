@@ -11,18 +11,22 @@ namespace Repository.Implementations
         private readonly ApplicationDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
         #endregion
 
         #region Constructors
-        public UnitOfWork(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UnitOfWork(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            RoleManager<ApplicationRole> roleManager)
         {
             this.db = db;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
             categoryRepository = new CategoryRepository(db);    
             countryRepository  = new CountryRepository(db);
             authenticationRepository = new AuthenticationRepository(userManager,signInManager);
+            authorizationRepository = new AuthorizationRepository(roleManager);
             storedProcedureRepository = new StoredProcedureRepository(db);
         }
         #endregion
@@ -35,6 +39,7 @@ namespace Repository.Implementations
         public IStoredProcedureRepository storedProcedureRepository { get; private set; }
 
         public IAuthenticationRepository authenticationRepository { get; private set; }
+        public IAuthorizationRepository authorizationRepository { get; private set; }
 
         public void Dispose()
         {

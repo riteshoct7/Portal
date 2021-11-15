@@ -1,6 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using AutoMapper;
+using Common;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
@@ -8,6 +10,7 @@ using Web.Models;
 
 namespace Web.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
 
@@ -16,18 +19,20 @@ namespace Web.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly INotyfService notyf;
 
         #endregion
 
         #region Constructors
-        public AccountController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<ApplicationUser> userManager,
+        public AccountController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager, INotyfService notyf)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.userManager = userManager;
+            this.roleManager = roleManager; 
             this.signInManager = signInManager;
             this.notyf = notyf;
         }
@@ -37,16 +42,47 @@ namespace Web.Controllers
         #region Methods
         
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register(string? returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;
-            
+
+            if(!unitOfWork.authorizationRepository.CheckRoleExist(Constants.CustomerRoleTitle))
+            {
+                ApplicationRole obj = new ApplicationRole() { Name = Constants.CustomerRoleTitle, Description = Constants.CustomerRoleTitle };
+                bool result = unitOfWork.authorizationRepository.AddRole(obj).Result;                
+                if(result)
+                {
+                    notyf.Success("Customer Role Created", 10);
+                }
+            }
+            else
+            {
+                notyf.Information("Customer Role Already Created", 10);
+            }
+
+            if (!unitOfWork.authorizationRepository.CheckRoleExist(Constants.AdminRoleTitle))
+            {
+                ApplicationRole obj = new ApplicationRole() { Name = Constants.AdminRoleTitle, Description = Constants.AdminRoleTitle };
+                bool result = unitOfWork.authorizationRepository.AddRole(obj).Result;
+                if (result)
+                {
+                    notyf.Success("Admin Role Created", 10);
+                }
+            }
+            else
+            {
+                notyf.Information("Admin Role Already Created", 10);
+            }
+
+
             RegisterViewModel registerViewModel = new RegisterViewModel();
             return View(registerViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public IActionResult Register(RegisterViewModel registerViewModel , string? returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;
@@ -76,7 +112,8 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet]        
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login(string? returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;                        
@@ -86,6 +123,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public IActionResult Login(LoginViewModel loginViewModel, string? returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;

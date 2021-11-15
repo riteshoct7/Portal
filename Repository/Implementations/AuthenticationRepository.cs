@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Common;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Repository.Interfaces;
 
@@ -25,14 +26,12 @@ namespace Repository.Implementations
         {
             var result = userManager.CreateAsync(user, password).Result;
             if (result.Succeeded)
-            {
-                //string role = "User";
-                //var roleResult = userManager.AddToRoleAsync(user, role).Result;
-                //if (roleResult.Succeeded)
-                //{
-                //    return true;
-                //}
-                return true;
+            {                
+                var roleResult = userManager.AddToRoleAsync(user, Constants.CustomerRoleTitle).Result;
+                if (roleResult.Succeeded)
+                {
+                    return true;
+                }                
             }
             return false;
         }
