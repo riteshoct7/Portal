@@ -6,7 +6,7 @@ namespace Repository.Interfaces
     {
         #region Methods
         bool Register(ApplicationUser user, string password);
-        ApplicationUser SignIn(string userName, string passowrd); 
+        ApplicationUser SignIn(string userName, string passowrd, out bool IsLockedOut); 
         #endregion
 
     }

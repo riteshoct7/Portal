@@ -37,17 +37,20 @@ namespace Web.Controllers
         #region Methods
         
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(string? returnurl = null)
         {
+            ViewData["ReturnUrl"] = returnurl;
+            
             RegisterViewModel registerViewModel = new RegisterViewModel();
             return View(registerViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(RegisterViewModel registerViewModel )
+        public IActionResult Register(RegisterViewModel registerViewModel , string? returnurl = null)
         {
-
+            ViewData["ReturnUrl"] = returnurl;
+            returnurl = returnurl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
                 ApplicationUser objUser = mapper.Map<ApplicationUser>(registerViewModel);
@@ -56,34 +59,13 @@ namespace Web.Controllers
                 if (result)
                 {
                     notyf.Success("Registered Successfully");
+                    return LocalRedirect(returnurl);
                 }
                 else
                 {
                     notyf.Error("Registration Failed Please Try Again");
                 }
-            }
-            //if (ModelState.IsValid)
-            //{
-            //    ApplicationUser objUser = mapper.Map<ApplicationUser>(registerViewModel);
-            //    var user = new ApplicationUser()
-            //    {
-            //        UserName = registerViewModel.Email,
-            //        Email = registerViewModel.Email,
-            //        FirstName = registerViewModel.FirstName,
-            //        LastName = registerViewModel.LastName
-            //    };
-            //    objUser.UserName = registerViewModel.Email;
-            //    //var result = await userManager.CreateAsync(user, registerViewModel.Password);
-            //    var result = await userManager.CreateAsync(objUser, registerViewModel.Password);
-            //    if (result.Succeeded)
-            //    {
-            //        //await signInManager.SignInAsync(user, isPersistent: false);
-            //        await signInManager.SignInAsync(objUser, isPersistent: false);
-            //        return RedirectToAction("Index", "Home");
-            //    }
-            //    AddErrors(result);
-
-            //}
+            }   
             return View(registerViewModel);
         }
         private void AddErrors (IdentityResult result)
@@ -95,53 +77,46 @@ namespace Web.Controllers
         }
 
         [HttpGet]        
-        public IActionResult Login()
+        public IActionResult Login(string? returnurl = null)
         {
+            ViewData["ReturnUrl"] = returnurl;                        
             LoginViewModel loginViewModel = new LoginViewModel();
             return View(loginViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginViewModel loginViewModel)
+        public IActionResult Login(LoginViewModel loginViewModel, string? returnurl = null)
         {
+            ViewData["ReturnUrl"] = returnurl;
+            returnurl = returnurl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var result = unitOfWork.authenticationRepository.SignIn(loginViewModel.Email, loginViewModel.Password);
+                bool isLockedOut;
+                var result = unitOfWork.authenticationRepository.SignIn(loginViewModel.Email, loginViewModel.Password, out  isLockedOut);
                 if (result != null)
-                {
-                    return RedirectToAction("Index", "Home");
+                {               
+                    return LocalRedirect(returnurl);
+                    //return RedirectToAction("Index", "Home");
                     //if (result.Roles.Contains("Admin"))
                     //{
                     //    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                     //}
                 }
-                return View(loginViewModel);
+                else
+                {
+                    if (isLockedOut)
+                    {
+                        notyf.Information("Your Account has been locked out please try after some time", 10);                        
+                    }
+                    else
+                    {
+                        notyf.Warning("Invalid Login Attempt", 10);
+                    }
+                    return View(loginViewModel);
+                }                                
             }
             return View(loginViewModel);
-            //if (ModelState.IsValid)
-            //{                
-            //    ApplicationUser objUser = await userManager.FindByEmailAsync(loginViewModel.Email);
-            //    if (objUser != null)
-            //    {
-            //        var result = await signInManager.PasswordSignInAsync(objUser, loginViewModel.Password, loginViewModel.RememberMe, lockoutOnFailure: false);
-            //        if (result.Succeeded)
-            //        {
-            //            return RedirectToAction("Index", "Home");
-            //        }
-            //        else
-            //        {
-            //            ModelState.AddModelError(String.Empty, "Invalid login Attempt");
-            //            return View(loginViewModel);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ModelState.AddModelError(String.Empty, "Email Does Not Exist");
-            //        return View(loginViewModel);
-            //    }
-            //}         
-            //return View(loginViewModel);
         }
 
         [HttpPost]

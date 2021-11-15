@@ -3,7 +3,7 @@
 
 <h1 class="text-info">Register</h1>
 
-<form asp-controller="Account" asp-action="Register" method="post" role="form">
+<form asp-controller="Account" asp-action="Register" method="post" role="form" asp-route-returnurl="@ViewData["ReturnUrl"]">
     <h4>Create a new Account</h4>
     <hr/>
     <div asp-validation-summary="All" class="text-danger"></div>

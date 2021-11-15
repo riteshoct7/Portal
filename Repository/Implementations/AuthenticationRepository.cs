@@ -36,16 +36,23 @@ namespace Repository.Implementations
             }
             return false;
         }
-        public ApplicationUser SignIn(string userName, string passowrd)
+        public ApplicationUser SignIn(string userName, string password,out bool IsLockedOut)
         {
-            var result = signInManager.PasswordSignInAsync(userName, passowrd, false, false).Result;
+            var result = signInManager.PasswordSignInAsync(userName, password, false, true).Result;
             if (result.Succeeded)
             {
                 var user = userManager.FindByNameAsync(userName).Result;
                 //var roles = userManager.GetRolesAsync(user).Result;
                 //user.Roles = roles.ToArray();
+                IsLockedOut = false;
                 return user;
             }
+            if (result.IsLockedOut)
+            {
+                IsLockedOut = true;
+                return null;
+            }
+            IsLockedOut = false;
             return null;
         } 
 

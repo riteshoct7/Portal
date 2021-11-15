@@ -1,6 +1,7 @@
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repository.Context;
 using Repository.Implementations;
@@ -15,6 +16,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
     ));
 
 builder.Services.AddIdentity<ApplicationUser,ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.Configure<IdentityOptions>(opt =>
+{
+    //password length
+    opt.Password.RequiredLength = 5;
+    //requires lowercase
+    opt.Password.RequireLowercase = true;
+    //requires uppercase
+    opt.Password.RequireUppercase = true;
+    //Time span for lockout
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
+    //maximum no of failed login attempts
+    opt.Lockout.MaxFailedAccessAttempts = 2;
+});
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(typeof(PortalMappings));
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
