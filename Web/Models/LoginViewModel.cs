@@ -24,7 +24,7 @@ namespace Web.Models
         public string Password { get; set; }
 
         [Display(Name ="Remember Me?")]
-        public string RememberMe { get; set; }
+        public bool RememberMe { get; set; }
 
         #endregion
 

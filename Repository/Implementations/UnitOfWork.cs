@@ -1,4 +1,6 @@
-﻿using Repository.Context;
+﻿using Entities.Models;
+using Microsoft.AspNetCore.Identity;
+using Repository.Context;
 using Repository.Interfaces;
 
 namespace Repository.Implementations
@@ -7,15 +9,20 @@ namespace Repository.Implementations
     {
         #region Fields
         private readonly ApplicationDbContext db;
-        
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+
         #endregion
 
         #region Constructors
-        public UnitOfWork(ApplicationDbContext db)
+        public UnitOfWork(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.db = db;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
             categoryRepository = new CategoryRepository(db);    
             countryRepository  = new CountryRepository(db);
+            authenticationRepository = new AuthenticationRepository(userManager,signInManager);
             storedProcedureRepository = new StoredProcedureRepository(db);
         }
         #endregion
@@ -26,6 +33,8 @@ namespace Repository.Implementations
         public ICountryRepository countryRepository { get; private set; }
 
         public IStoredProcedureRepository storedProcedureRepository { get; private set; }
+
+        public IAuthenticationRepository authenticationRepository { get; private set; }
 
         public void Dispose()
         {
