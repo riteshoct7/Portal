@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Web.Areas.Admin.Models.Dtos.CityListingDTO>
+
+@{
+    ViewData["Title"] = "Cities List";
+}
+<style>
+    .text-right {
+        text-align: right !important;
+    }
+</style>
+<div class="row">
+    <div class="col-6">
+        <h1 class="text-primary">Cities List</h1>
+    </div>
+    <div class="col-6 text-right">
+        <a class="btn btn-primary" asp-action="Upsert"><i class="fas fa-plus"></i> &nbsp; Create New City</a>
+    </div>
+</div>
+<br />

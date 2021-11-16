@@ -29,6 +29,9 @@ namespace Repository.Implementations
             authorizationRepository = new AuthorizationRepository(roleManager);
             storedProcedureRepository = new StoredProcedureRepository(db);
             rolesRepository = new RolesRepository(db);
+            stateRepository = new StateRepository(db);
+            cityRepository = new CityRepository(db);
+            productRepository = new ProductRepository(db);
         }
         #endregion
 
@@ -43,6 +46,12 @@ namespace Repository.Implementations
         public IAuthorizationRepository authorizationRepository { get; private set; }
 
         public IRolesRepository rolesRepository { get; private set; }
+
+        public IStateRepository stateRepository { get; private set; }
+
+        public ICityRepository cityRepository { get; private set; }
+
+        public IProductRepository productRepository { get; private set; }
 
         public void Dispose()
         {
