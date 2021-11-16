@@ -30,7 +30,12 @@ namespace Repository.Implementations
         {
             return roleManager.RoleExistsAsync(roleName).Result;
             
-        } 
+        }
+
+        public List<ApplicationRole> GetAllRoles()
+        {
+            return roleManager.Roles.ToList();
+        }
         #endregion
     }
 }

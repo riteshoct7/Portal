@@ -10,6 +10,8 @@
 
         IAuthenticationRepository authenticationRepository { get; }
         IAuthorizationRepository authorizationRepository { get; }
+
+        IRolesRepository rolesRepository { get; }
         void SaveChanges();
 
         #endregion

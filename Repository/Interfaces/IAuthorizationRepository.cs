@@ -10,6 +10,8 @@ namespace Repository.Interfaces
 
         Task<bool> AddRole(ApplicationRole obj);
 
+        List<ApplicationRole> GetAllRoles();
+
         #endregion
     }
 }

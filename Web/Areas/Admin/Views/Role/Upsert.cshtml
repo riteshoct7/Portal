@@ -1,14 +1,14 @@
-﻿@model Web.Areas.Admin.Models.Dtos.CategoryListingDTO
+﻿@model Web.Areas.Admin.Models.Dtos.ApplicationRoleDTO
 @{
     Layout = "_AdminLayout";
-    var title = "Create Category";
+    var title = "Create Role";
 }
 
 <form method="post">
     <div class="row p-3 border">
-        @if (Model.CategoryId != 0)
+        @if (Model.Id != 0)
         {
-            title = "Edit Category";
+            title = "Edit Role";
         }
 
         <div class="col-12 border-bottom">
@@ -17,13 +17,24 @@
         <div class="col-8 pt-4">
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CategoryName"></label>
+                    <label asp-for="Name"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="CategoryName" class="form-control" />
-                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
+
+            <div class="form-group row mt-3">
+                <div class="col-4">
+                    <label asp-for="NormalizedName"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="NormalizedName" class="form-control" />
+                    <span asp-validation-for="NormalizedName" class="text-danger"></span>
+                </div>
+            </div>
+
             <div class="form-group row mt-3">
                 <div class="col-4">
                     <label asp-for="Description"></label>
@@ -35,9 +46,9 @@
             </div>
             <div class="form-group row mt-3">
                 <div class="col-8 offset-4">
-                    @if (Model.CategoryId != 0)
+                    @if (Model.Id != 0)
                     {
-                        <partial name="_EditAndBackToListButton" model="@Model.CategoryId" />
+                        <partial name="_EditAndBackToListButton" model="@Model.Id" />
                     }
                     else
                     {
