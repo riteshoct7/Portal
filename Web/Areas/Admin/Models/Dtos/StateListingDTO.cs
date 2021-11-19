@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Areas.Admin.Models.Dtos
@@ -28,13 +29,19 @@ namespace Web.Areas.Admin.Models.Dtos
         [Display(Name = "Enabled")]
         public bool Enabled { get; set; }
 
-        [ForeignKey("Country")]
+        
+        [Display(Name ="Country")]
+        [Required(ErrorMessage ="Country Required")]
         public int CountryId { get; set; }
 
-        public CountryListingDTO Country { get; set; }
+        //public CountryListingDTO Country { get; set; }
 
-        public List<CityListingDTO> Cities { get; set; }
+        //public List<CityListingDTO> Cities { get; set; }
 
+        public IEnumerable<SelectListItem> Countries { get; set; }
+
+        [Display(Name ="Country")]
+        public string CountryName { get; set; }
 
         #endregion  
     }

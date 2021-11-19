@@ -17,3 +17,60 @@
     </div>
 </div>
 <br />
+
+
+<table class="table" id="tblState">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StateName)
+            </th>            
+            <th>
+                @Html.DisplayNameFor(model => model.StateDescription)
+            </th>    
+            <th>
+                @Html.DisplayNameFor(model => model.CountryName)
+            </th>    
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.StateName)
+                </td>                
+                <td>
+                    @Html.DisplayFor(modelItem => item.StateDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.CountryName)
+                </td> 
+                
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new {  id=item.CountryId })*@
+                    <a href="/Admin/State/Upsert/@item.StateId" class="btn  btn-success text-white" style="cursor:pointer;">
+                         <i class="fas fa-edit"></i> &nbsp; Edit
+                    </a>
+                    <a  class="btn btn-danger text-white" style="cursor:pointer;">
+                         <i class="fas fa-trash-alt"></i> &nbsp; Delete
+                    </a>
+                    @*@Html.ActionLink("Delete", "Delete", new {  id=item.CountryId  })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section scripts {
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#tblState").DataTable();
+    });
+</script>
+}
