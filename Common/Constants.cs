@@ -20,8 +20,9 @@
         public const string usp_InsertCountry = "usp_InsertCountry";
         public const string usp_UpdateCountry = "usp_UpdateCountry"; 
         public const string usp_DeleteCountry = "usp_DeleteCountry";
+        public const string usp_GetStatesWithCountry = "usp_GetStatesWithCountry";
 
-        
+
         #endregion
     }
 }

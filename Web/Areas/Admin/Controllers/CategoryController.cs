@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
@@ -12,14 +13,16 @@ namespace Web.Areas.Admin.Controllers
 
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly INotyfService notyf;
 
         #endregion
 
         #region Constructors
-        public CategoryController(IUnitOfWork unitOfWork ,IMapper mapper)
+        public CategoryController(IUnitOfWork unitOfWork ,IMapper mapper, INotyfService notyf)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.notyf = notyf;
         }
         #endregion
 
@@ -77,6 +80,25 @@ namespace Web.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index)); 
             }
             return View(model);
+        }
+
+        
+        public IActionResult Delete(int id)
+        {
+            Category objCategory = unitOfWork.categoryRepository.Get(id);            
+            if (objCategory == null)
+            {
+                notyf.Error("Category Not Found,Error while deleting", 10);
+                return Json(new { success = false, message = "Error while deleting" });
+            }            
+            unitOfWork.categoryRepository.Remove(mapper.Map<Category>(objCategory));
+            unitOfWork.SaveChanges();            
+            notyf.Information("Category Deleted Successfully", 10);
+            //return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Delete Successful" });
+
+
+
         }
 
         #endregion

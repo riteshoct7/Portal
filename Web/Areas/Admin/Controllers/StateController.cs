@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Common;
+using Dapper;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,19 +28,25 @@ namespace Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<State> lstState = unitOfWork.stateRepository.GetAll();             
             List<StateListingDTO> lst = new List<StateListingDTO>();
-            foreach (var item in lstState)
+
+            //Stored Procedure Call
+            var parameter = new DynamicParameters();
+            parameter.Add("@StateID", 0);
+            parameter.Add("@Enabled", true);
+            var allObj = unitOfWork.storedProcedureRepository.List<StateListingDTO>(Constants.usp_GetStatesWithCountry, parameter);
+            foreach (var item in allObj)
             {
                 lst.Add(mapper.Map<StateListingDTO>(item));
             }
-            return View(lst);            
+            return View(lst);
         } 
 
         [HttpGet]
         public IActionResult Upsert(int? id)
-        {                                    
-            StateListingDTO model = new StateListingDTO();
+        {
+            
+            StateCrudDTO model = new StateCrudDTO();
             model.Countries = unitOfWork.countryRepository.GetAll().Select(i => new SelectListItem
             {
                 Text = i.CountryName,
@@ -49,29 +57,34 @@ namespace Web.Areas.Admin.Controllers
                 //for create
                 return View(model);
             }
-            else 
+            else
             {
-                //for edit
+                ////for edit
                 State objState = unitOfWork.stateRepository.Get(id.GetValueOrDefault());
                 if (objState == null)
                 {
                     return NotFound();
                 }
-                model = mapper.Map<StateListingDTO>(objState);
+                model = mapper.Map<StateCrudDTO>(objState);
                 model.Countries = unitOfWork.countryRepository.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.CountryName,
                     Value = i.CountryId.ToString()
                 });
                 return View(model);
-            }                                                
+            }            
         }
 
 
         [HttpPost]
-        public IActionResult Upsert(StateListingDTO model)
-        {            
-            if(ModelState.IsValid)
+        public IActionResult Upsert(StateCrudDTO model)
+        {
+            model.Countries = unitOfWork.countryRepository.GetAll().Select(i => new SelectListItem
+            {
+                Text = i.CountryName,
+                Value = i.CountryId.ToString()
+            });
+            if (ModelState.IsValid)
             {
                 model.Enabled = true;
                 State objState = mapper.Map<State>(model);
@@ -86,11 +99,7 @@ namespace Web.Areas.Admin.Controllers
                 unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
             }
-            model.Countries = unitOfWork.countryRepository.GetAll().Select(i => new SelectListItem
-            {
-                Text = i.CountryName,
-                Value = i.CountryId.ToString()
-            });
+        
             return View(model);
         }
 

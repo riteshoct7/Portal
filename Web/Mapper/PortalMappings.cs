@@ -19,6 +19,7 @@ namespace Web.Mapper
             CreateMap<ApplicationUser, RegisterViewModel>().ReverseMap();
             CreateMap<ApplicationUser, LoginViewModel>().ReverseMap();
             CreateMap<ApplicationRole, ApplicationRoleDTO>().ReverseMap();            
+            CreateMap<State, StateCrudDTO>().ReverseMap();            
         } 
         #endregion
     }

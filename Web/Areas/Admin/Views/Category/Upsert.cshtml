@@ -9,6 +9,7 @@
         @if (Model.CategoryId != 0)
         {
             title = "Edit Category";
+              <input type="hidden" asp-for="CategoryId" />
         }
 
         <div class="col-12 border-bottom">

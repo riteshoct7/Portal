@@ -1,4 +1,4 @@
-﻿@model Web.Areas.Admin.Models.Dtos.StateListingDTO
+﻿@model Web.Areas.Admin.Models.Dtos.StateCrudDTO
 @{
     Layout = "_AdminLayout";
     var title = "Create State";
@@ -10,6 +10,7 @@
         @if (Model.StateId != 0)
         {
             title = "Edit State";
+                        <input type="hidden" asp-for="StateId" />
         }
 
         <div class="col-12 border-bottom">
