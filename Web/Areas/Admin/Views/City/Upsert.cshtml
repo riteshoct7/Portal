@@ -1,0 +1,75 @@
+﻿@model Web.Areas.Admin.Models.Dtos.CityCrudDTO
+@{
+    Layout = "_AdminLayout";
+    var title = "Create City";
+}
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row p-3 border">
+        @if (Model.CityId != 0)
+        {
+            title = "Edit City";
+            <input type="hidden" asp-for="CityId" />
+        }
+
+        <div class="col-12 border-bottom">
+            <h2 class="text-primary">@title</h2>
+        </div>
+        <div class="col-8 pt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CityName"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CityName" class="form-control" />
+                    <span asp-validation-for="CityName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-4">
+                    <label asp-for="CityDescription"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CityDescription" class="form-control" />
+                    <span asp-validation-for="CityDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-4">
+                    <label asp-for="StateId"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(x=>x.StateId,Model.States,"Select  State",new {@class="form-control"})
+                    <span asp-validation-for="StateId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-4">
+                    <label asp-for="CountryId"></label>
+                </div>
+                <div class="col-8">
+                    @Html.DropDownListFor(x=>x.CountryId,Model.Countries,"Select  Country",new {@class="form-control"})
+                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-8 offset-4">
+                    @if (Model.CityId != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="@Model.CityId" />
+                    }
+                    else
+                    {
+                        <partial name="_CreateAndBackToListButton" />
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

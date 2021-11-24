@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Areas.Admin.Models.Dtos
 {
@@ -13,10 +12,7 @@ namespace Web.Areas.Admin.Models.Dtos
         }
         #endregion
 
-        #region Fields
-
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        #region Fields        
         public int CityId { get; set; }
 
         [Display(Name = "City Name")]
@@ -28,11 +24,25 @@ namespace Web.Areas.Admin.Models.Dtos
 
         [Display(Name = "Enabled")]
         public bool Enabled { get; set; }
-
-        [ForeignKey("State")]
+        
         public int StateId { get; set; }
-        public StateListingDTO State { get; set; }
+        [Display(Name = "State")]
+        public string StateName { get; set; }
+
+        public int CountryId { get; set; }
+        [Display(Name = "Country")]
+        public string CountryName { get; set; }
+
+        [Display(Name = "CountryDescription")]
+        public string CountryDescription { get; set; }
+
+        [Display(Name = "State Description")]
+        public string StateDescription { get; set; }
+
+        [Display(Name = "ISD Code")]
+        public string ISDCode { get; set; }
 
         #endregion
+
     }
 }

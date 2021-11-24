@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using Common;
 using Dapper;
 using Entities.Models;
@@ -14,14 +15,16 @@ namespace Web.Areas.Admin.Controllers
 
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly INotyfService notyf;
 
         #endregion
 
         #region Constructors
-        public CountryController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CountryController(IUnitOfWork unitOfWork, IMapper mapper, INotyfService notyf)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.notyf = notyf;
         }
         #endregion
 
@@ -89,6 +92,66 @@ namespace Web.Areas.Admin.Controllers
 
             }
         }
+
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            CountryListingDTO model = new CountryListingDTO();            
+            if (id == null)
+            {
+                //for create
+                return View(model);
+            }
+            else
+            {
+                ////for edit
+                Country objCountry = unitOfWork.countryRepository.Get(id.GetValueOrDefault());
+                if (objCountry == null)
+                {
+                    return NotFound();
+                }
+                model = mapper.Map<CountryListingDTO>(objCountry);                
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Upsert(CountryListingDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Enabled = true;
+                Country objCountry = mapper.Map<Country>(model);
+                if (model.CountryId == 0)
+                {
+                    unitOfWork.countryRepository.Add(objCountry);
+                }
+                else
+                {
+                    unitOfWork.countryRepository.Update(objCountry);
+                }
+                unitOfWork.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Country objCountry = unitOfWork.countryRepository.Get(id);
+            if (objCountry == null)
+            {
+                notyf.Error("State Not Found,Error while deleting", 10);
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            unitOfWork.countryRepository.Remove(mapper.Map<Country>(objCountry));
+            unitOfWork.SaveChanges();
+            notyf.Information("State Deleted Successfully", 10);
+            //return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Delete Successful" });
+        }
+
         #endregion
     }
     

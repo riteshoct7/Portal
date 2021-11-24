@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using Common;
 using Dapper;
 using Entities.Models;
@@ -14,13 +15,15 @@ namespace Web.Areas.Admin.Controllers
         #region Fields
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly INotyfService notyf;
         #endregion
 
         #region Constructors
-        public StateController(IUnitOfWork unitOfWork,IMapper mapper)
+        public StateController(IUnitOfWork unitOfWork,IMapper mapper, INotyfService notyf)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.notyf = notyf;
         }
         #endregion
 
@@ -29,7 +32,6 @@ namespace Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<StateListingDTO> lst = new List<StateListingDTO>();
-
             //Stored Procedure Call
             var parameter = new DynamicParameters();
             parameter.Add("@StateID", 0);
@@ -44,8 +46,7 @@ namespace Web.Areas.Admin.Controllers
 
         [HttpGet]
         public IActionResult Upsert(int? id)
-        {
-            
+        {            
             StateCrudDTO model = new StateCrudDTO();
             model.Countries = unitOfWork.countryRepository.GetAll().Select(i => new SelectListItem
             {
@@ -60,12 +61,15 @@ namespace Web.Areas.Admin.Controllers
             else
             {
                 ////for edit
-                State objState = unitOfWork.stateRepository.Get(id.GetValueOrDefault());
-                if (objState == null)
+                //Stored Procedure Call
+                var parameter = new DynamicParameters();
+                parameter.Add("@StateID", id.GetValueOrDefault());
+                parameter.Add("@Enabled", true);
+                model = unitOfWork.storedProcedureRepository.OneRecord<StateCrudDTO>(Constants.usp_GetStatesWithCountry, parameter);                                          
+                if (model == null)
                 {
                     return NotFound();
-                }
-                model = mapper.Map<StateCrudDTO>(objState);
+                }                
                 model.Countries = unitOfWork.countryRepository.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.CountryName,
@@ -74,7 +78,6 @@ namespace Web.Areas.Admin.Controllers
                 return View(model);
             }            
         }
-
 
         [HttpPost]
         public IActionResult Upsert(StateCrudDTO model)
@@ -98,9 +101,22 @@ namespace Web.Areas.Admin.Controllers
                 }
                 unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
-            }
-        
+            }        
             return View(model);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            State objState = unitOfWork.stateRepository.Get(id);
+            if (objState == null)
+            {
+                notyf.Error("State Not Found,Error while deleting", 10);
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            unitOfWork.stateRepository.Remove(mapper.Map<State>(objState));
+            unitOfWork.SaveChanges();
+            notyf.Information("State Deleted Successfully", 10);            
+            return Json(new { success = true, message = "Delete Successful" });
         }
 
         #endregion

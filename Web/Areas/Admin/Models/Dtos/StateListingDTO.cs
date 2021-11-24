@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Web.Areas.Admin.Models.Dtos
 {
@@ -13,8 +11,7 @@ namespace Web.Areas.Admin.Models.Dtos
         }
         #endregion
 
-        #region Fields
-        
+        #region Fields        
         public int StateId { get; set; }        
 
         [Display(Name ="State Name")]
@@ -25,6 +22,12 @@ namespace Web.Areas.Admin.Models.Dtos
         public int CountryId { get; set; }
         [Display(Name = "Country")]
         public string CountryName { get; set; }
+
+        [Display(Name = "Country Description")]
+        public string CountryDescription { get; set; }
+
+        [Display(Name = "ISD Code")]
+        public string ISDCode { get; set; }
 
         #endregion  
     }

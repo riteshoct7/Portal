@@ -1,0 +1,65 @@
+﻿@model Web.Areas.Admin.Models.Dtos.CountryListingDTO
+@{
+    Layout = "_AdminLayout";
+    var title = "Create Country";
+}
+
+<form method="post" >
+      <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row p-3 border">
+        @if (Model.CountryId != 0)
+        {
+            title = "Edit Country";
+                        <input type="hidden" asp-for="CountryId" />
+        }
+
+        <div class="col-12 border-bottom">
+            <h2 class="text-primary">@title</h2>
+        </div>
+        <div class="col-8 pt-4">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CountryName"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CountryName" class="form-control" />
+                    <span asp-validation-for="CountryName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-4">
+                    <label asp-for="ISDCode"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="ISDCode" class="form-control" />
+                    <span asp-validation-for="ISDCode" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row mt-3">
+                <div class="col-4">
+                    <label asp-for="Description"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+                          
+            <div class="form-group row mt-3">
+                <div class="col-8 offset-4">
+                    @if (Model.CountryId != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="@Model.CountryId" />
+                    }
+                    else
+                    {
+                        <partial name="_CreateAndBackToListButton" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

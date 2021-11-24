@@ -8,6 +8,7 @@
         text-align: right !important;
     }
 </style>
+
 <div class="row">
     <div class="col-6">
         <h1 class="text-primary">States List</h1>
@@ -16,13 +17,13 @@
         <a class="btn btn-primary" asp-action="Upsert"><i class="fas fa-plus"></i> &nbsp; Create New State</a>
     </div>
 </div>
+
 <br />
 
 
-<table class="table" id="tblState">
-    <thead>
-        <tr>
-
+<table  class="table table-stiped table-bordered"  id="tblState">
+    <thead class="thead-dark">
+        <tr class="table-info">
             <th>
                 @Html.DisplayNameFor(model => model.StateName)
             </th>            
@@ -31,6 +32,12 @@
             </th>    
             <th>
                 @Html.DisplayNameFor(model => model.CountryName)
+            </th>    
+            <th>
+                @Html.DisplayNameFor(model => model.CountryDescription)
+            </th>    
+            <th>
+                @Html.DisplayNameFor(model => model.ISDCode)
             </th>    
             <th></th>
         </tr>
@@ -48,16 +55,23 @@
                 </td>
                 <td>
                     @Html.DisplayFor(model => item.CountryName)
-                </td> 
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.CountryDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.ISDCode)
+                </td>
                 
                 <td>
                     @*@Html.ActionLink("Edit", "Edit", new {  id=item.CountryId })*@
                     <a href="/Admin/State/Upsert/@item.StateId" class="btn  btn-success text-white" style="cursor:pointer;">
                          <i class="fas fa-edit"></i> &nbsp; Edit
                     </a>
-                    <a  class="btn btn-danger text-white" style="cursor:pointer;">
-                         <i class="fas fa-trash-alt"></i> &nbsp; Delete
-                    </a>
+                    
+                      <a class="btn btn-danger text-white" style="cursor:pointer;" onclick=Delete("/Admin/State/Delete/@item.StateId")>
+                            <i class="fas fa-trash-alt"></i> &nbsp; Delete
+                        </a>
                     @*@Html.ActionLink("Delete", "Delete", new {  id=item.CountryId  })*@
                 </td>
             </tr>
@@ -69,8 +83,38 @@
 @section scripts {
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#tblState").DataTable();
-    });
+
+        $(document).ready(function(){
+            $("#tblState").DataTable();
+        });
+
+        function Delete(url) {        
+            swal({
+                title:"Are your sure you want to delete?",
+                text:"You will not be able to restore the data!",
+                icon:"warning",
+                buttons:true,
+                dangerousMode:true
+                }).then((willDelete) => {
+                   if (willDelete) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: url,
+                            success: function (data) {
+                                if (data.success) {
+                                    window.location.href = '/Admin/State/Index' ;
+                                    //toastr.success(data.message);
+                                    //dataTable.ajax.reload();
+                                }
+                                else {
+                               
+                                }
+                            }
+                        });
+                    }
+            });
+        }
+
 </script>
+
 }

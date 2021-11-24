@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Web.Areas.Admin.Models.Dtos
 {
@@ -20,9 +19,6 @@ namespace Web.Areas.Admin.Models.Dtos
         [Required(ErrorMessage =("Country Required"))]
         public int CountryId { get; set; }
         
-        
-     
-     
         public IEnumerable<SelectListItem>? Countries { get; set; }
     }
 }

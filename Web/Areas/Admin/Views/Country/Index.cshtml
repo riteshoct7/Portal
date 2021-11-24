@@ -1,18 +1,30 @@
 ﻿@model IEnumerable<Web.Areas.Admin.Models.Dtos.CountryListingDTO>
 
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Countries List";
 }
+<style>
+    .text-right {
+        text-align: right !important;
+    }
+</style>
 
-<h1>Countries</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table" id="tblCountry">
-    <thead>
-        <tr>
+<div class="row">
+    <div class="col-6">
+        <h1 class="text-primary">Countries List</h1>
+    </div>
+    <div class="col-6 text-right">
+        <a class="btn btn-primary" asp-action="Upsert"><i class="fas fa-plus"></i> &nbsp; Create New Country</a>
+    </div>
+</div>
+<br />
 
+<div class="p-4 border rounded">
+<table class="table table-stiped table-bordered" id="tblCountry">
+    <thead class="thead-dark">
+        <tr class="table-info">
             <th>
                 @Html.DisplayNameFor(model => model.CountryName)
             </th>
@@ -21,10 +33,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Enabled)
-            </th>
+            </th>           
             <th></th>
         </tr>
     </thead>
@@ -36,21 +45,18 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CountryName)
                 </td>
-                <th>
+                <td>
                     @Html.DisplayFor(modelItem => item.ISDCode)
-                </th>
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Enabled)
-                </td>
+                </td>                
                 <td>
                     @*@Html.ActionLink("Edit", "Edit", new {  id=item.CountryId })*@
-                    <a href="/Admin/Category/Upsert/@item.CountryId" class="btn  btn-success text-white" style="cursor:pointer;">
+                    <a href="/Admin/Country/Upsert/@item.CountryId" class="btn  btn-success text-white" style="cursor:pointer;">
                          <i class="fas fa-edit"></i> &nbsp; Edit
                     </a>
-                    <a  class="btn btn-danger text-white" style="cursor:pointer;">
+                    <a  class="btn btn-danger text-white" style="cursor:pointer;" onclick=Delete("/Admin/Country/Delete/@item.CountryId")>
                          <i class="fas fa-trash-alt"></i> &nbsp; Delete
                     </a>
                     @*@Html.ActionLink("Delete", "Delete", new {  id=item.CountryId  })*@
@@ -59,7 +65,7 @@
         }
     </tbody>
 </table>
-
+</div>
 
 @section scripts {
 
@@ -67,5 +73,34 @@
     $(document).ready(function(){
         $("#tblCountry").DataTable();
     });
+
+    
+    function Delete(url) {        
+        swal({
+            title:"Are your sure you want to delete?",
+            text:"You will not be able to restore the data!",
+            icon:"warning",
+            buttons:true,
+            dangerousMode:true
+            }).then((willDelete) => {
+               if (willDelete) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: url,
+                        success: function (data) {
+                            if (data.success) {
+                                window.location.href = '/Admin/Country/Index' ;
+                                //toastr.success(data.message);
+                                //dataTable.ajax.reload();
+                            }
+                            else {
+                               
+                            }
+                        }
+                    });
+                }
+        });
+    }
+
 </script>
 }

@@ -96,9 +96,6 @@ namespace Web.Areas.Admin.Controllers
             notyf.Information("Category Deleted Successfully", 10);
             //return RedirectToAction(nameof(Index));
             return Json(new { success = true, message = "Delete Successful" });
-
-
-
         }
 
         #endregion
