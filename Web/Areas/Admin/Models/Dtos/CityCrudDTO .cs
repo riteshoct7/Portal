@@ -8,9 +8,11 @@ namespace Web.Areas.Admin.Models.Dtos
         public int CityId { get; set; }
 
         [Display(Name = "City Name")]
+        [Required(ErrorMessage ="City Name Required")]
         public string CityName { get; set; }
 
         [Display(Name = "City Description")]
+        [Required(ErrorMessage = "City Description Required")]
         public string CityDescription { get; set; }
 
         public bool Enabled { get; set; }

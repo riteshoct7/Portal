@@ -10,7 +10,9 @@
         @if (Model.CityId != 0)
         {
             title = "Edit City";
-            <input type="hidden" asp-for="CityId" />
+            <input type="hidden" asp-for="CityId" id="hdnCityID" />
+            <input type="hidden" asp-for="CountryId" id="hdnCountryID" />
+            <input type="hidden" asp-for="StateId" id="hdnStateID" />
         }
 
         <div class="col-12 border-bottom">
@@ -37,22 +39,24 @@
             </div>
             <div class="form-group row mt-3">
                 <div class="col-4">
-                    <label asp-for="StateId"></label>
+                    <label asp-for="CountryId"></label>
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(x=>x.StateId,Model.States,"Select  State",new {@class="form-control"})
-                    <span asp-validation-for="StateId" class="text-danger"></span>
+                    @Html.DropDownListFor(x=>x.CountryId,Model.Countries,"Select  Country",new {@class="form-control",@id="ddlCountry"})
+                    <span asp-validation-for="CountryId" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row mt-3">
                 <div class="col-4">
-                    <label asp-for="CountryId"></label>
+                    <label asp-for="StateId"></label>
                 </div>
                 <div class="col-8">
-                    @Html.DropDownListFor(x=>x.CountryId,Model.Countries,"Select  Country",new {@class="form-control"})
-                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                    @*@Html.DropDownListFor(x=>x.StateId,Model.States,"Select  State",new {@class="form-control"})*@
+                    @Html.DropDownListFor(x=>x.StateId,new SelectList(String.Empty,"StateId","StateName"),new {@class="form-control",@id="ddlState"})
+                    <span asp-validation-for="StateId" class="text-danger"></span>
+                     
                 </div>
-            </div>
+            </div>            
             <div class="form-group row mt-3">
                 <div class="col-8 offset-4">
                     @if (Model.CityId != 0)
@@ -72,4 +76,42 @@
 
 @section Scripts {
 <partial name="_ValidationScriptsPartial" />
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        if($("#hdnCityID").val() == undefined) {
+            var items = "<option value=''>Select State</option>";
+            $("#ddlState").html(items);
+        } else {            
+            GetStatesByCountryId($("#hdnCountryID").val());                        
+            $("#ddlState").val($("#hdnStateID").val());            
+            setTimeout(function(){  $("#ddlState").val($("#hdnStateID").val()); },100);                                
+        }
+    });
+
+    
+    $("#ddlCountry").change(function(){                
+        var ddlSource ="#ddlCountry";
+        GetStatesByCountryId($(ddlSource).val());    
+    });
+
+    function GetStatesByCountryId(CountryId) {
+        var url = '@Url.Content("~/")'+"Admin/City/GetStatesByCountryId";            
+        $.getJSON(
+                    url,
+                    {CountryId: CountryId},
+                    function(data) {
+                            var items = "";
+                            $("#ddlState").empty();
+                            $.each(data,function(i,state) {
+                                items+="<option value='"+state.value+"'>"+state.text+"</option>";
+                            });        
+                            $("#ddlState").html(items);
+                    });             
+
+        
+     }
+
+</script>
 }

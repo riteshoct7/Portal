@@ -85,11 +85,11 @@ namespace Web.Areas.Admin.Controllers
                 Text = i.CountryName,
                 Value = i.CountryId.ToString()
             });
-            model.States = unitOfWork.stateRepository.GetAll().Select(i => new SelectListItem
-            {
-                Text = i.StateName,
-                Value = i.StateId.ToString()
-            });
+            //model.States = unitOfWork.stateRepository.GetAll().Select(i => new SelectListItem
+            //{
+            //    Text = i.StateName,
+            //    Value = i.StateId.ToString()
+            //});
             if (id == null)
             {
                 //for create
@@ -111,7 +111,7 @@ namespace Web.Areas.Admin.Controllers
                     Text = i.CountryName,
                     Value = i.CountryId.ToString()
                 });
-                model.States = unitOfWork.stateRepository.GetAll().Select(i => new SelectListItem
+                model.States = unitOfWork.stateRepository.GetAll().Where(x=>x.CountryId == model.CountryId).ToList().Select(i => new SelectListItem
                 {
                     Text = i.StateName,
                     Value = i.StateId.ToString()
@@ -166,6 +166,18 @@ namespace Web.Areas.Admin.Controllers
             TempData["ShowMessage"] = CrudOperationType.Delete;
             notyf.Information("City Deleted Successfully", 10);            
             return Json(new { success = true, message = "Delete Successful" });
+        }
+
+        public JsonResult GetStatesByCountryId (int CountryId)
+        {
+            List<State> statesList = new List<State>();
+
+            //Get States for country from database
+            statesList = unitOfWork.stateRepository.GetAll().Where(x=>x.CountryId == CountryId).ToList();
+
+            //Insert Selct Item in List
+            statesList.Insert(0, new State {StateName="Select State"});
+            return Json(new SelectList(statesList,"StateId","StateName"));
         }
 
         #endregion
