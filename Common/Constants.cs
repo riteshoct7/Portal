@@ -22,8 +22,26 @@
         public const string usp_DeleteCountry = "usp_DeleteCountry";
         public const string usp_GetStatesWithCountry = "usp_GetStatesWithCountry";
         public const string usp_GetCityWithStateCountry = "usp_GetCityWithStateCountry";
-        
 
+        public enum Entity
+        {
+            Country,
+            State,
+            City,
+            Category,
+            Product
+        }
+        public const string Country = "Country";
+        //public const string State = "State";
+        public const string Space = " ";
+        public const string InsertedSuccesfully = "Saved Succesfully";
+        public const string UpdatedSuccesfully = "Updated Succesfully";
+        public const string DeletedSuccesfully = "Deleted Succesfully";
+        public enum CrudOperationType { 
+            Insert =1,
+            Update =2,
+            Delete =3
+        }
 
         #endregion
     }

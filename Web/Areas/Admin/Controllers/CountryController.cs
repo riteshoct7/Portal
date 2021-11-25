@@ -6,6 +6,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 using Web.Areas.Admin.Models.Dtos;
+using static Common.Constants;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -30,12 +31,41 @@ namespace Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public IActionResult Index()
+        public void ShowMessage ()
         {
+            if (TempData.ContainsKey("ShowMessage"))
             {
-                
-                List<CountryListingDTO> lst = new List<CountryListingDTO>();
+                CrudOperationType tempDataShowMessage = (CrudOperationType)TempData["ShowMessage"]; // returns "Bill" 
+                switch (tempDataShowMessage)
+                {
+                    case CrudOperationType.Insert:
+                        {
+                            notyf.Success(Entity.Country + Constants.Space + Constants.InsertedSuccesfully, 10);
+                            break;
+                        }
+                    case CrudOperationType.Update:
+                        {
+                            notyf.Success(Entity.Country + Constants.Space + Constants.UpdatedSuccesfully, 10);
+                            break;
+                        }
+                    case CrudOperationType.Delete:
+                        {
+                            notyf.Success(Entity.Country + Constants.Space + Constants.DeletedSuccesfully, 10);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
 
+        }
+
+        public IActionResult Index()
+        {                       
+                ShowMessage();                   
+                List<CountryListingDTO> lst = new List<CountryListingDTO>();
                 //Stored Procedure Call
                 var parameter = new DynamicParameters();
                 parameter.Add("@CountryID", 0);
@@ -90,7 +120,7 @@ namespace Web.Areas.Admin.Controllers
 
                 return View(lst);
 
-            }
+            
         }
 
         [HttpGet]
@@ -125,10 +155,12 @@ namespace Web.Areas.Admin.Controllers
                 if (model.CountryId == 0)
                 {
                     unitOfWork.countryRepository.Add(objCountry);
+                    TempData["ShowMessage"] = CrudOperationType.Insert;
                 }
                 else
                 {
                     unitOfWork.countryRepository.Update(objCountry);
+                    TempData["ShowMessage"] = CrudOperationType.Update;
                 }
                 unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
@@ -147,7 +179,8 @@ namespace Web.Areas.Admin.Controllers
             }
             unitOfWork.countryRepository.Remove(mapper.Map<Country>(objCountry));
             unitOfWork.SaveChanges();
-            notyf.Information("State Deleted Successfully", 10);
+            notyf.Information("State Deleted Successfully", 10);            
+            TempData["ShowMessage"] = CrudOperationType.Delete;
             //return RedirectToAction(nameof(Index));
             return Json(new { success = true, message = "Delete Successful" });
         }

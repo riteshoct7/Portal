@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Repository.Interfaces;
 using Web.Areas.Admin.Models.Dtos;
+using static Common.Constants;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -28,9 +29,39 @@ namespace Web.Areas.Admin.Controllers
         #endregion
 
         #region Methods
+        public void ShowMessage()
+        {
+            if (TempData.ContainsKey("ShowMessage"))
+            {
+                CrudOperationType tempDataShowMessage = (CrudOperationType)TempData["ShowMessage"]; // returns "Bill" 
+                switch (tempDataShowMessage)
+                {
+                    case CrudOperationType.Insert:
+                        {
+                            notyf.Success(Entity.City + Constants.Space + Constants.InsertedSuccesfully, 10);
+                            break;
+                        }
+                    case CrudOperationType.Update:
+                        {
+                            notyf.Success(Entity.City + Constants.Space + Constants.UpdatedSuccesfully, 10);
+                            break;
+                        }
+                    case CrudOperationType.Delete:
+                        {
+                            notyf.Success(Entity.City + Constants.Space + Constants.DeletedSuccesfully, 10);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
 
+        }
         public IActionResult Index()
-        {            
+        {
+            ShowMessage();
             List<CityListingDTO> lst = new List<CityListingDTO>();
             //Stored Procedure Call
             var parameter = new DynamicParameters();
@@ -109,10 +140,12 @@ namespace Web.Areas.Admin.Controllers
                 if (model.CityId == 0)
                 {
                     unitOfWork.cityRepository.Add(objCity);
+                    TempData["ShowMessage"] = CrudOperationType.Insert;
                 }
                 else
                 {
                     unitOfWork.cityRepository.Update(objCity);
+                    TempData["ShowMessage"] = CrudOperationType.Update;
                 }
                 unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
@@ -130,6 +163,7 @@ namespace Web.Areas.Admin.Controllers
             }
             unitOfWork.cityRepository.Remove(mapper.Map<City>(objCity));
             unitOfWork.SaveChanges();
+            TempData["ShowMessage"] = CrudOperationType.Delete;
             notyf.Information("City Deleted Successfully", 10);            
             return Json(new { success = true, message = "Delete Successful" });
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Repository.Interfaces;
 using Web.Areas.Admin.Models.Dtos;
+using static Common.Constants;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -28,9 +29,38 @@ namespace Web.Areas.Admin.Controllers
         #endregion
 
         #region Methods
-
+        public void ShowMessage()
+        {
+            if (TempData.ContainsKey("ShowMessage"))
+            {
+                CrudOperationType tempDataShowMessage = (CrudOperationType)TempData["ShowMessage"]; // returns "Bill" 
+                switch (tempDataShowMessage)
+                {
+                    case CrudOperationType.Insert:
+                        {
+                            notyf.Success(Entity.State + Constants.Space + Constants.InsertedSuccesfully, 10);
+                            break;
+                        }
+                    case CrudOperationType.Update:
+                        {
+                            notyf.Success(Entity.State + Constants.Space + Constants.UpdatedSuccesfully, 10);
+                            break;
+                        }
+                    case CrudOperationType.Delete:
+                        {
+                            notyf.Success(Entity.State + Constants.Space + Constants.DeletedSuccesfully, 10);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
+        }
         public IActionResult Index()
         {
+            ShowMessage();
             List<StateListingDTO> lst = new List<StateListingDTO>();
             //Stored Procedure Call
             var parameter = new DynamicParameters();
@@ -94,10 +124,12 @@ namespace Web.Areas.Admin.Controllers
                 if(model.StateId == 0)
                 {
                     unitOfWork.stateRepository.Add(objState);
+                    TempData["ShowMessage"] = CrudOperationType.Insert;
                 }
                 else
                 {
                     unitOfWork.stateRepository.Update(objState);
+                    TempData["ShowMessage"] = CrudOperationType.Update;
                 }
                 unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
@@ -115,6 +147,7 @@ namespace Web.Areas.Admin.Controllers
             }
             unitOfWork.stateRepository.Remove(mapper.Map<State>(objState));
             unitOfWork.SaveChanges();
+            TempData["ShowMessage"] = CrudOperationType.Delete;
             notyf.Information("State Deleted Successfully", 10);            
             return Json(new { success = true, message = "Delete Successful" });
         }
