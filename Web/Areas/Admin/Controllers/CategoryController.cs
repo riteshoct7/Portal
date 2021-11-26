@@ -99,6 +99,12 @@ namespace Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(unitOfWork.categoryRepository.CategoryExist(model.CategoryName))
+                {
+                    TempData["ShowMessage"] =   CrudOperationType.Duplicate;
+                    notyf.Warning(Entity.Category + Constants.Space + model.CategoryName + Constants.Space + Constants.AlreadyExist, 10);
+                    return View(model);
+                }
                 Category objCategory = mapper.Map<Category>(model);
                 objCategory.Enabled = true;
                 if (model.CategoryId ==0)
@@ -111,7 +117,18 @@ namespace Web.Areas.Admin.Controllers
                     unitOfWork.categoryRepository.Update(objCategory);
                     TempData["ShowMessage"] = CrudOperationType.Update;
                 }
-                unitOfWork.SaveChanges();
+                if(!unitOfWork.SaveChanges())
+                {
+                    if (model.CategoryId == 0)
+                    {
+                        TempData["ShowMessage"] = CrudOperationType.ErrorOnInsert;
+                        
+                    }
+                    else
+                    {
+                        TempData["ShowMessage"] = CrudOperationType.ErrorOnUpdate;                        
+                    }
+                }
                 return RedirectToAction(nameof(Index)); 
             }
             return View(model);

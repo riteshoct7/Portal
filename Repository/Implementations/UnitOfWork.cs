@@ -58,9 +58,9 @@ namespace Repository.Implementations
             db.Dispose();
         }
 
-        public void SaveChanges()
+        public bool SaveChanges()
         {
-            db.SaveChanges();
+            return db.SaveChanges() >= 0 ? true : false;
         } 
         #endregion
     }

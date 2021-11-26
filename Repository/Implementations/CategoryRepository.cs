@@ -21,7 +21,19 @@ namespace Repository.Implementations
         public Category GetCategoryByName(string categoryame)
         {
             return db.Categories.Where(x => x.CategoryName == categoryame).FirstOrDefault();
-        } 
+        }
+
+        public bool CategoryExist(string categoryname)
+        {
+            bool value = db.Categories.Any(x => x.CategoryName.ToLower().Trim() == categoryname.ToLower().Trim());
+            return value;
+
+        }
+        public bool CategoryExist(int id)
+        {
+            bool value = db.Categories.Any(x => x.CategoryId == id);
+            return value;
+        }
         #endregion
 
     }

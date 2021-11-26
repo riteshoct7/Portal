@@ -22,7 +22,7 @@
 
         IProductRepository productRepository { get; }   
 
-        void SaveChanges();
+        bool SaveChanges();
 
         #endregion
     }

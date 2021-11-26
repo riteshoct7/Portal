@@ -37,10 +37,15 @@
         public const string InsertedSuccesfully = "Saved Succesfully";
         public const string UpdatedSuccesfully = "Updated Succesfully";
         public const string DeletedSuccesfully = "Deleted Succesfully";
+        public const string AlreadyExist = "Already Exist";
         public enum CrudOperationType { 
             Insert =1,
             Update =2,
-            Delete =3
+            Delete =3,
+            ErrorOnInsert=4,
+            ErrorOnUpdate = 5,            
+            AlreadyExist = 6,
+            Duplicate = 7
         }
 
         #endregion
